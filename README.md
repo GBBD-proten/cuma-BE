@@ -25,6 +25,10 @@
 
         $ python run.py
 
+## swagger 접속
+
+http://localhost:5000/docs
+
 ## 주의점
 
 1. 컨벤션 지키기
