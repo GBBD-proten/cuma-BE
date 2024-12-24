@@ -1,7 +1,3 @@
-# cuma-BE
-
-커뮤니티 마스터 BackEnd
-
 ## 프로젝트 설정
 
 1.  프로젝트 폴더 생성
@@ -25,9 +21,9 @@
 
         $ python run.py
 
-## swagger 접속
+## swagger 접속 방법
 
-http://localhost:5000/docs
+url : http://localhost:5000/docs
 
 ## 주의점
 
