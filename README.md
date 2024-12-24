@@ -23,7 +23,7 @@
 
 6.  프로젝트 실행
 
-    $ python run.py
+        $ python run.py
 
 ## 주의점
 
