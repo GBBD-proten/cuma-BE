@@ -1,1 +1,1 @@
-test = 'login'
+test = 'login_test'
