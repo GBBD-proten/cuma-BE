@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.9-slim AS base
 WORKDIR /python-app
 COPY . .
 RUN pip install poetry==1.8.5
