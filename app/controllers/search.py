@@ -19,7 +19,7 @@ class ElasticSearchController:
     def __init__(self, request):
         self.client = client
         self.query = request.args.get('query', '')
-        self.index = request.args.get('index', 'dc_lol')
+        self.index = request.args.get('index', 'site_dc')
         self.size = int(request.args.get('size', 10))
 
     def search_documents(self):
