@@ -1,7 +1,11 @@
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 import logging
+
 from app.config import Config
+
+from app.utils.paging import Paging
+
 
 
 elasticsearch_url = Config.ELASTICSEARCH_URL
@@ -49,7 +53,10 @@ class ElasticSearchController:
                 print(f"startDate: {self.startDate}, endDate: {self.endDate}")
                 search = search.filter('range', date={'gte': self.startDate, 'lte': self.endDate})
                 
-            search = search.extra(from_=self.page, size=self.size)
+            # 페이징 처리   
+            paging = Paging.get_instance(self.page, self.size)
+            
+            search = search.extra(from_=paging._page, size=paging._size)
 
             print(f"search query: {search.to_dict()}")
             
