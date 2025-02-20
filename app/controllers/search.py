@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-from elasticsearch_dsl import Search, Q
+from elasticsearch_dsl import Search
 import logging
 from app.config import Config
 
@@ -19,8 +19,18 @@ class ElasticSearchController:
     def __init__(self, request):
         self.client = client
         self.query = request.args.get('query', '')
-        self.index = request.args.get('index', 'site_dc')
+        self.index = request.args.get('index', '')
         self.size = int(request.args.get('size', 10))
+        
+        dateRange = request.args.get('dateRange', '')
+        if('/' in dateRange):
+            dateRange = dateRange.split('/')
+            self.startDate = dateRange[0]
+            self.endDate = dateRange[1]
+        else:
+            self.startDate = ''
+            self.endDate = ''
+
 
     def search_documents(self):
         try:
@@ -28,8 +38,17 @@ class ElasticSearchController:
             search = Search(using=self.client, index=self.index)
             
             # 검색 쿼리 생성
-            query = Q('multi_match', query=self.query, fields=['subject', 'content'], fuzziness='AUTO')
-            search = search.query(query)
+            if(self.query != ''):
+                search = search.query('multi_match', query=self.query, fields=['subject', 'content'], fuzziness='AUTO')
+            else:
+                search = search.query('match_all')
+                
+            # 날짜 쿼리 생성
+            if(self.startDate != '' and self.endDate != ''):
+                print(f"startDate: {self.startDate}, endDate: {self.endDate}")
+                search = search.filter('range', date={'gte': self.startDate, 'lte': self.endDate})
+
+            print(f"search query: {search.to_dict()}")
             
             # 검색 실행
             response = search.execute()

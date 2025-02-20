@@ -13,7 +13,8 @@ class SearchAPI(Resource):
     @search_ns.doc(params={
        'query': {'description': '검색어', 'in': 'query', 'type': 'string'},
        'index': {'description': '검색할 인덱스', 'in': 'query', 'type': 'string', 'default': 'site_dc'},
-       'size': {'description': '결과 개수', 'in': 'query', 'type': 'integer', 'default': 10}
+       'size': {'description': '결과 개수', 'in': 'query', 'type': 'integer', 'default': 10},
+       'dateRange': {'description': '날짜 검색', 'in': 'query', 'type': 'string', 'default': ''}
    })
     def get(self):
         search_controller = ElasticSearchController(request)
