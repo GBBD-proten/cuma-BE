@@ -14,7 +14,8 @@ class SearchAPI(Resource):
        'query': {'description': '검색어', 'in': 'query', 'type': 'string'},
        'index': {'description': '검색할 인덱스', 'in': 'query', 'type': 'string', 'default': 'site_dc'},
        'size': {'description': '결과 개수', 'in': 'query', 'type': 'integer', 'default': 10},
-       'dateRange': {'description': '날짜 검색', 'in': 'query', 'type': 'string', 'default': ''}
+       'page': {'description': '페이지 번호', 'in': 'query', 'type': 'integer', 'default': 1},
+       'dateRange': {'description': '날짜 검색', 'in': '20250101000000,20250102000000', 'type': 'string'}
    })
     def get(self):
         search_controller = ElasticSearchController(request)
