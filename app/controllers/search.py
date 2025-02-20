@@ -21,10 +21,11 @@ class ElasticSearchController:
         self.query = request.args.get('query', '')
         self.index = request.args.get('index', '')
         self.size = int(request.args.get('size', 10))
+        self.page = int(request.args.get('page', 1))
         
         dateRange = request.args.get('dateRange', '')
         if('/' in dateRange):
-            dateRange = dateRange.split('/')
+            dateRange = dateRange.split(',')
             self.startDate = dateRange[0]
             self.endDate = dateRange[1]
         else:
@@ -47,6 +48,8 @@ class ElasticSearchController:
             if(self.startDate != '' and self.endDate != ''):
                 print(f"startDate: {self.startDate}, endDate: {self.endDate}")
                 search = search.filter('range', date={'gte': self.startDate, 'lte': self.endDate})
+                
+            search = search.extra(from_=self.page, size=self.size)
 
             print(f"search query: {search.to_dict()}")
             
