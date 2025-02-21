@@ -8,12 +8,18 @@ class Paging:
         return cls._instance
     
     def __init__(self, page, size):
-        if page is None:
-            page = 1
-        if size is None:
-            size = 10
+        # if page is None:
+        #     page = 1
+        # if size is None:
+        #     size = 10
         
-        self._page = page
-        self._size = size
+        self._startNum = None
+        self._endNum = None
         
+        self.set_paging(page,size)
+        
+        
+    def set_paging(self,page,size):
+        self._startNum = str((page-1)*size)
+        self._endNum = str(page*size)
         
