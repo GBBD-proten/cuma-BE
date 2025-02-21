@@ -35,6 +35,8 @@ class ElasticSearchController:
         else:
             self.startDate = ''
             self.endDate = ''
+            
+        print(f"query: {self.query}, index: {self.index}, size: {self.size}, page: {self.page}, startDate: {self.startDate}, endDate: {self.endDate}")
 
 
     def search_documents(self):
@@ -56,7 +58,7 @@ class ElasticSearchController:
             # 페이징 처리   
             paging = Paging.get_instance(self.page, self.size)
             
-            search = search.extra(from_=paging._page, size=paging._size)
+            search = search.extra(from_=paging._endNum, size=self.size)
 
             print(f"search query: {search.to_dict()}")
             
