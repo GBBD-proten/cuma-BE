@@ -6,7 +6,8 @@ from app.config import Config
 
 from app.utils.paging import Paging
 
-
+logging.basicConfig(level=logging.INFO)  # 로그 레벨 설정
+logger = logging.getLogger(__name__)
 
 elasticsearch_url = Config.ELASTICSEARCH_URL
 logging.info(f"Elasticsearch URL: {elasticsearch_url}")
@@ -36,7 +37,7 @@ class ElasticSearchController:
             self.startDate = ''
             self.endDate = ''
             
-        print(f"query: {self.query}, index: {self.index}, size: {self.size}, page: {self.page}, startDate: {self.startDate}, endDate: {self.endDate}")
+        logger.info(f"query: {self.query}, index: {self.index}, size: {self.size}, page: {self.page}, startDate: {self.startDate}, endDate: {self.endDate}")
 
 
     def search_documents(self):
@@ -52,15 +53,13 @@ class ElasticSearchController:
                 
             # 날짜 쿼리 생성
             if(self.startDate != '' and self.endDate != ''):
-                print(f"startDate: {self.startDate}, endDate: {self.endDate}")
                 search = search.filter('range', date={'gte': self.startDate, 'lte': self.endDate})
                 
-            # 페이징 처리   
-            paging = Paging.get_instance(self.page, self.size)
-            
-            search = search.extra(from_=paging._endNum, size=self.size)
+            # 페이징 쿼리 생성성   
+            paging = Paging(self.page, self.size)
+            search = search.extra(from_=str(paging.startNum), size=str(self.size))
 
-            print(f"search query: {search.to_dict()}")
+            logger.info(f"search query: {search.to_dict()}")
             
             # 검색 실행
             response = search.execute()
