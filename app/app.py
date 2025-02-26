@@ -18,8 +18,9 @@ def create_app():
             doc='/docs')
     
     # 라우트 등록
-    from app.routes import search_ns
-    
+    from app.routes import search_ns, indexList_ns
+
     api.add_namespace(search_ns)
+    api.add_namespace(indexList_ns)
     
     return app
