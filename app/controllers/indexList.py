@@ -29,8 +29,15 @@ class IndexListController:
         
         index_list = []
         for index in get_alias:
+            kor_index = ""
+            if(index == "site_dc"):
+                kor_index = "디씨인사이드"
+            elif(index == "site_fmkorea"):
+                kor_index = "FM코리아"
+                
             index_json = {
-                "indexName": index
+                "indexName": index,
+                "korIndexName": kor_index
             }
             index_list.append(index_json)
             
