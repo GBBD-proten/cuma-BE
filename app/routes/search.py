@@ -32,3 +32,4 @@ class SearchAPI(Resource):
             logging.error(f"Unexpected Search Error: {str(e)}", exc_info=True)
             return jsonify({'error': {str(e)}}), 500
 
+
