@@ -6,9 +6,9 @@ RUN poetry install --no-root
 EXPOSE 5000
 
 # 개발환경
-FROM base AS development
+FROM base AS dev
 CMD ["poetry", "run", "python", "run.py"]
 
 # 운영환경
-FROM base AS production
+FROM base AS prod
 CMD ["poetry", "run", "gunicorn", "-b", "0.0.0.0:5000", "run:app"]
