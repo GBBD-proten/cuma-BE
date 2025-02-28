@@ -1,6 +1,6 @@
-# cuma-BE
+## 커뮤니티마스터 BackEnd
 
-커뮤니티 마스터 BackEnd
+커뮤니티 마스터 백엔드 프로젝트 입니다.
 
 ## 프로젝트 설정
 
@@ -25,13 +25,17 @@
 
         $ python run.py
 
-## swagger 접속
+7.  가상환경 종료
 
-http://localhost:5000/docs
+        $ exit
+
+## swagger 접속 방법
+
+url : http://localhost:5000/docs
 
 ## 주의점
 
-1. 컨벤션 지키기
-2. .env 파일 생성
-3. **pycache** 폴더 push 금지
-4. main branch 에서 작업 금지
+- 컨벤션 지키기
+- .env 파일 생성하기
+- pycache 폴더 push 금지
+- main branch 에서 작업 금지

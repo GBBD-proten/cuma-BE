@@ -15,11 +15,12 @@ def create_app():
             title='커뮤니티마스터 API',
             version='1.0',
             description='커뮤니티마스터 API',
-            doc='/docs')  # Swagger UI 경로
+            doc='/docs')
     
     # 라우트 등록
-    from app.routes import search_ns
-    
+    from app.routes import search_ns, indexList_ns
+
     api.add_namespace(search_ns)
+    api.add_namespace(indexList_ns)
     
     return app
