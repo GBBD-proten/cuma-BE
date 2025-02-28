@@ -24,16 +24,18 @@ class ElasticSearchController:
     def __init__(self, request):
         self.client = client
         
-        if 'query' not in request.args or 'index' not in request.args:
-            raise ValueError("Parameter Error : query and index are required")
+        if 'index' not in request.args:
+            raise ValueError("Parameter index is required")
         
-        self.query = request.args['query']
+        self.query = request.args.get('query', '')
         self.index = request.args['index']
         self.size = int(request.args.get('size', 10))
         self.page = int(request.args.get('page', 1))
+        self.sort = request.args.get('sort', 'date')
+        self.order = request.args.get('order', 'desc')
         
         dateRange = request.args.get('dateRange', '')
-        if('/' in dateRange):
+        if(',' in dateRange):
             dateRange = dateRange.split(',')
             self.startDate = dateRange[0]
             self.endDate = dateRange[1]
@@ -41,10 +43,10 @@ class ElasticSearchController:
             self.startDate = ''
             self.endDate = ''
             
-        logger.info(f"query: {self.query}, index: {self.index}, size: {self.size}, page: {self.page}, startDate: {self.startDate}, endDate: {self.endDate}")
+        logger.info(f"query: {self.query}, index: {self.index}, size: {self.size}, page: {self.page}, startDate: {self.startDate}, endDate: {self.endDate}, sort: {self.sort}")
 
 
-    def search_documents(self):
+    def search(self):
         try:
             # Elasticsearch-dsl Search 객체 생성
             search = Search(using=self.client, index=self.index)
@@ -62,6 +64,9 @@ class ElasticSearchController:
             # 페이징 쿼리 생성성   
             paging = Paging(self.page, self.size)
             search = search.extra(from_=str(paging.startNum), size=str(self.size))
+            
+            # 정렬 쿼리 생성
+            search = search.sort({self.sort: {"order": self.order}})
 
             logger.info(f"search query: {search.to_dict()}")
             
@@ -74,14 +79,18 @@ class ElasticSearchController:
                 results.append(hit.to_dict())
                 
             return {
+                'status': 'success',
+                'message': 'Search Success',
+                'query': self.query,
+                'index': self.index,
                 'total': response['hits']['total']['value'],
                 'results': results
             }
             
         except Exception as e:
             logging.error(f"Elasticsearch : {elasticsearch_url}")
-            logging.error(f"Elasticsearch 검색 중 오류 발생: {str(e)}")
-            raise
+            logging.error(f"Elasticsearch Search Error: {str(e)}")
+            raise Exception(f"Elasticsearch Search Error: {str(e)}")
 
     
     
