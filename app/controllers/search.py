@@ -23,8 +23,12 @@ client = Elasticsearch(
 class ElasticSearchController: 
     def __init__(self, request):
         self.client = client
-        self.query = request.args.get('query', '')
-        self.index = request.args.get('index', '')
+        
+        if 'query' not in request.args or 'index' not in request.args:
+            raise ValueError("Parameter Error : query and index are required")
+        
+        self.query = request.args['query']
+        self.index = request.args['index']
         self.size = int(request.args.get('size', 10))
         self.page = int(request.args.get('page', 1))
         

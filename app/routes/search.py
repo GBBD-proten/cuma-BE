@@ -18,18 +18,17 @@ class SearchAPI(Resource):
        'dateRange': {'description': '날짜 검색 (YYYYMMDDHHMMSS OR YYYYMMDD)', 'type': 'string'}
    })
     def get(self):
-        search_controller = ElasticSearchController(request)
         try:
+            search_controller = ElasticSearchController(request)
             result = search_controller.search_documents()
             return result
         except ConnectionError as e:
-            logging.error(f"Elasticsearch 연결 오류: {str(e)}", exc_info=True)
-            return jsonify({'error': 'Search 서비스에 연결할 수 없습니다'}), 503
+            logging.error(f"Elasticsearch Connection Error: {str(e)}", exc_info=True)
+            return jsonify({'error': {str(e)}}), 503
         except RequestError as e:
-            logging.error(f"검색 쿼리 오류: {str(e)}", exc_info=True)
-            return jsonify({'error': '잘못된 검색 요청입니다'}), 400
+            logging.error(f"Search Request Error: {str(e)}", exc_info=True)
+            return jsonify({'error': {str(e)}}), 400
         except Exception as e:
-            logging.error(f"예상치 못한 검색 오류: {str(e)}", exc_info=True)
-            logging.error(f"예상치 못한 검색 오류: {result}", exc_info=True)
-            return jsonify({'error': '서버 내부 오류가 발생했습니다'}), 500
+            logging.error(f"Unexpected Search Error: {str(e)}", exc_info=True)
+            return jsonify({'error': {str(e)}}), 500
 
